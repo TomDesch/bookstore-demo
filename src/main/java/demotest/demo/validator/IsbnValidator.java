@@ -1,6 +1,5 @@
 package demotest.demo.validator;
 
-import demotest.demo.model.ValidIsbn;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import java.util.Objects;
