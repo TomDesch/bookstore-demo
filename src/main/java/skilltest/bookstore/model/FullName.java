@@ -25,8 +25,10 @@ public class FullName {
     @Column(name = "id", nullable = false)
     private Long id;
 
+    @Column
     private String firstName;
 
+    @Column
     private String lastName;
 
 }

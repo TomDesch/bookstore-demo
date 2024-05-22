@@ -29,11 +29,11 @@ public class Customer {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "full_name_id")
     private FullName fullName;
 
-    @Column(name = "email", nullable = false)
+    @Column(name = "email")
     @ValidEmail
     private String email;
 

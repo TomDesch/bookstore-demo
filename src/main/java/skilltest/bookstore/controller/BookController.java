@@ -2,7 +2,6 @@ package skilltest.bookstore.controller;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,7 +31,7 @@ public class BookController {
         return bookService.getBook(isbn);
     }
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping
     @PreAuthorize("hasRole('USER')")
     public BookDto createBook(@RequestBody BookDto bookDto) {
         return bookService.createBook(bookDto);

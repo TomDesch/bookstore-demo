@@ -26,7 +26,6 @@ import skilltest.bookstore.dto.FullNameDto;
 import skilltest.bookstore.model.Author;
 import skilltest.bookstore.model.Book;
 import skilltest.bookstore.model.FullName;
-import skilltest.bookstore.repository.AuthorRepository;
 import skilltest.bookstore.repository.BookRepository;
 
 @ExtendWith(SpringExtension.class)
@@ -41,9 +40,6 @@ class BookControllerIntegrationTest {
     private BookRepository bookRepository;
 
     @Autowired
-    private AuthorRepository authorRepository;
-
-    @Autowired
     private ObjectMapper objectMapper;
 
     private Book book;
@@ -52,7 +48,6 @@ class BookControllerIntegrationTest {
     @BeforeEach
     void setUp() {
         bookRepository.deleteAll();
-        authorRepository.deleteAll();
 
         FullName fullName = FullName.builder()
                                     .firstName("John")

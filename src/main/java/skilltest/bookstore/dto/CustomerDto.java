@@ -3,12 +3,14 @@ package skilltest.bookstore.dto;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import skilltest.bookstore.validator.ValidEmail;
 
 @RequiredArgsConstructor
 @Getter
+@Setter
 @EqualsAndHashCode
 @ToString
 @SuperBuilder

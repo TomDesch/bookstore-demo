@@ -27,8 +27,8 @@ public class Book {
     @ValidIsbn
     private String isbn;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "id")
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "author_id")
     private Author author;
 
     @Column
