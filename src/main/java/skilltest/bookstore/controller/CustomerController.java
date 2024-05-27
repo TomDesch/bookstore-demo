@@ -1,5 +1,6 @@
 package skilltest.bookstore.controller;
 
+import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -42,7 +43,7 @@ public class CustomerController {
 
     @PostMapping
     @PreAuthorize("hasRole('USER')")
-    public CustomerDto createCustomer(@RequestBody CustomerDto customerDto) {
+    public CustomerDto createCustomer(@RequestBody @Valid CustomerDto customerDto) {
         return customerService.createCustomer(customerDto);
     }
 }
