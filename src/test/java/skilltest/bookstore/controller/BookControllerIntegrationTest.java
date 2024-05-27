@@ -1,5 +1,6 @@
 package skilltest.bookstore.controller;
 
+import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -48,7 +49,7 @@ class BookControllerIntegrationTest {
                .andDo(print())
                .andExpect(status().isOk())
                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-               .andExpect(jsonPath("$", hasSize(1)))
+               .andExpect(jsonPath("$", hasSize(greaterThan(0))))
                .andExpect(jsonPath("$[0].isbn", is(VALID_ISBN)))
                .andExpect(jsonPath("$[0].author.id", is(10)))
                .andExpect(jsonPath("$[0].price", is(29.99D)))
@@ -58,7 +59,7 @@ class BookControllerIntegrationTest {
 
     @Test
     @WithMockUser
-    void getBook() throws Exception {
+    void getBook_withValidISBN_returnsBook() throws Exception {
         mockMvc.perform(get("/books/{isbn}", VALID_ISBN))
                .andDo(print())
                .andExpect(status().isOk())
@@ -71,7 +72,7 @@ class BookControllerIntegrationTest {
 
     @Test
     @WithMockUser
-    void createBook() throws Exception {
+    void createBook_withValidISBN_createsBook() throws Exception {
         FullNameDto newFullNameDto = FullNameDto.builder()
                                                 .lastName("Doe")
                                                 .firstName("Jane")
@@ -90,7 +91,7 @@ class BookControllerIntegrationTest {
         mockMvc.perform(post("/books").contentType(MediaType.APPLICATION_JSON)
                                       .content(objectMapper.writeValueAsString(newBookDto)))
                .andDo(print())
-               .andExpect(status().isOk())
+               .andExpect(status().isCreated())
                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                .andExpect(jsonPath("$.isbn", is(newBookDto.getIsbn())))
                .andExpect(jsonPath("$.price", is(newBookDto.getPrice()

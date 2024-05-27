@@ -1,6 +1,7 @@
 package skilltest.bookstore.controller;
 
 import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -49,7 +50,7 @@ class CustomerControllerIntegrationTest {
         mockMvc.perform(get("/customers"))
                .andDo(print())
                .andExpect(status().isOk())
-               .andExpect(jsonPath("$.size()", greaterThan(0)));
+               .andExpect(jsonPath("$", hasSize(greaterThan(0))));
     }
 
     @Test
@@ -78,11 +79,11 @@ class CustomerControllerIntegrationTest {
 
     @Test
     @WithMockUser
-    void createCustomer_withValidCustomer_returnsCreatedCustomer() throws Exception {
+    void createCustomer_withValidCustomer_createsCustomer() throws Exception {
         mockMvc.perform(post("/customers").contentType(MediaType.APPLICATION_JSON)
                                           .content(objectMapper.writeValueAsString(customerDto)))
                .andDo(print())
-               .andExpect(status().isOk())
+               .andExpect(status().isCreated())
                .andExpect(jsonPath("$.id", is(1)))
                .andExpect(jsonPath("$.email", is(customerDto.getEmail())));
     }
