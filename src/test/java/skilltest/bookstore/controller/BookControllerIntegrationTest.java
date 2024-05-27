@@ -44,7 +44,7 @@ class BookControllerIntegrationTest {
 
     @Test
     @WithMockUser
-    void getAllBooks() throws Exception {
+    void getAllBooks_booksExists_returnsBooks() throws Exception {
         mockMvc.perform(get("/books"))
                .andDo(print())
                .andExpect(status().isOk())

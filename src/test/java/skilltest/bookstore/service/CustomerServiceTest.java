@@ -119,7 +119,7 @@ class CustomerServiceTest {
     }
 
     @Test
-    void createCustomer() {
+    void createCustomer_validCustomer_createsCustomer() {
         when(modelMapper.map(customerDto, Customer.class)).thenReturn(customer);
         when(customerRepository.save(any(Customer.class))).thenReturn(customer);
         when(modelMapper.map(customer, CustomerDto.class)).thenReturn(customerDto);
