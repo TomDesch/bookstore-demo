@@ -23,7 +23,7 @@ import skilltest.bookstore.validator.ValidIsbn;
 public class Book {
 
     @Id
-    @Column(name = "isbn", nullable = false, length = 13)
+    @Column(name = "isbn", nullable = false, length = 13, unique = true)
     @ValidIsbn
     private String isbn;
 

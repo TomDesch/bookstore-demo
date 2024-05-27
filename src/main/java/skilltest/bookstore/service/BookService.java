@@ -18,7 +18,6 @@ public class BookService {
     private final BookRepository bookRepository;
 
     private final ModelMapper modelMapper;
-
     private static final String BOOK_NOT_FOUND = "Book with ISBN %s not found";
 
     public List<BookDto> getAllBooks() {
@@ -33,7 +32,6 @@ public class BookService {
                              .map(this::toDto)
                              .orElseThrow(() -> new EntityNotFoundException(BOOK_NOT_FOUND.formatted(isbn)));
     }
-
 
     public BookDto createBook(BookDto bookDTO) {
         Book book = fromDto(bookDTO);
