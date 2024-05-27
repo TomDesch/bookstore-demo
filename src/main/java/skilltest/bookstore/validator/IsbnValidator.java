@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 
 public class IsbnValidator implements ConstraintValidator<ValidIsbn, String> {
 
-    private static final String ISBN_REGEX = "^(?=(?:[^0-9]*[0-9]){10}(?:(?:[^0-9]*[0-9]){3})?$)[\\d-]+$";
+    private static final String ISBN_REGEX = "^(?:\\d{9}[0-9X]|\\d{13}|(?:\\d{1,5}-){3}\\d{1}|(?:\\d{1,5}-){2}\\d{1})$";
     private Pattern pattern;
     private static final char ZERO = '0';
     private static final char NINE = '9';
