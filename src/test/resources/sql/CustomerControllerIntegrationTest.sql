@@ -1,5 +1,5 @@
-INSERT INTO full_name (id, first_name, last_name)
-VALUES (10, 'a first name', 'a last name');
+INSERT INTO FULL_NAME (ID, FIRST_NAME, LAST_NAME)
+VALUES (10, 'A FIRST NAME', 'A LAST NAME');
 
-INSERT INTO customer (id, email, full_name_id)
-VALUES (10, 'test@example.be', 10);
+INSERT INTO CUSTOMER (ID, EMAIL, FULL_NAME_ID)
+VALUES (10, 'TEST@EXAMPLE.BE', 10);

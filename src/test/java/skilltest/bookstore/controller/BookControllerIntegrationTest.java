@@ -4,13 +4,13 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.math.BigDecimal;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,93 +18,53 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.context.jdbc.Sql.ExecutionPhase;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import skilltest.bookstore.dto.AuthorDto;
 import skilltest.bookstore.dto.BookDto;
 import skilltest.bookstore.dto.FullNameDto;
-import skilltest.bookstore.model.Author;
-import skilltest.bookstore.model.Book;
-import skilltest.bookstore.model.FullName;
-import skilltest.bookstore.repository.BookRepository;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 @AutoConfigureMockMvc
+@Sql(value = {"/sql/BookControllerIntegrationTest.sql"}, executionPhase = ExecutionPhase.BEFORE_TEST_CLASS)
 class BookControllerIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;
 
     @Autowired
-    private BookRepository bookRepository;
-
-    @Autowired
     private ObjectMapper objectMapper;
-
-    private Book book;
-    private BookDto bookDto;
-
-    @BeforeEach
-    void setUp() {
-        bookRepository.deleteAll();
-
-        FullName fullName = FullName.builder()
-                                    .firstName("John")
-                                    .lastName("Doe")
-                                    .build();
-        Author author = Author.builder()
-                              .fullName(fullName)
-                              .build();
-        book = new Book("1234567890123", author, BigDecimal.valueOf(29.99), "A sample book", 10);
-        bookRepository.save(book);
-
-        FullNameDto fullNameDto = FullNameDto.builder()
-                                             .id(1L)
-                                             .firstName("Joshua")
-                                             .lastName("Blosh")
-                                             .build();
-        AuthorDto authorDto = AuthorDto.builder()
-                                       .id(1L)
-                                       .fullName(fullNameDto)
-                                       .build();
-        bookDto = BookDto.builder()
-                         .isbn("1234567890123")
-                         .author(authorDto)
-                         .price(BigDecimal.valueOf(29.99))
-                         .description("A sample book")
-                         .stock(10)
-                         .build();
-    }
 
     @Test
     @WithMockUser
     void getAllBooks() throws Exception {
         mockMvc.perform(get("/books"))
+               .andDo(print())
                .andExpect(status().isOk())
                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                .andExpect(jsonPath("$", hasSize(1)))
-               .andExpect(jsonPath("$[0].isbn", is(bookDto.getIsbn())))
-               .andExpect(jsonPath("$[0].author.id", is(bookDto.getAuthor()
-                                                               .getId()
-                                                               .intValue())))
-               .andExpect(jsonPath("$[0].price", is(bookDto.getPrice()
-                                                           .doubleValue())))
-               .andExpect(jsonPath("$[0].description", is(bookDto.getDescription())))
-               .andExpect(jsonPath("$[0].stock", is(bookDto.getStock())));
+               .andExpect(jsonPath("$[0].isbn", is("1234567890123")))
+               .andExpect(jsonPath("$[0].author.id", is(10)))
+               .andExpect(jsonPath("$[0].price", is(29.99D)))
+               .andExpect(jsonPath("$[0].description", is("A SAMPLE BOOK")))
+               .andExpect(jsonPath("$[0].stock", is(10)));
     }
 
     @Test
     @WithMockUser
     void getBook() throws Exception {
-        mockMvc.perform(get("/books/{isbn}", book.getIsbn()))
+        String ISBN = "1234567890123";
+        mockMvc.perform(get("/books/{isbn}", ISBN))
+               .andDo(print())
                .andExpect(status().isOk())
                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-               .andExpect(jsonPath("$.isbn", is(bookDto.getIsbn())))
-               .andExpect(jsonPath("$.price", is(bookDto.getPrice()
-                                                        .doubleValue())))
-               .andExpect(jsonPath("$.description", is(bookDto.getDescription())))
-               .andExpect(jsonPath("$.stock", is(bookDto.getStock())));
+               .andExpect(jsonPath("$.isbn", is(ISBN)))
+               .andExpect(jsonPath("$.price", is(29.99D)))
+               .andExpect(jsonPath("$.description", is("A SAMPLE BOOK")))
+               .andExpect(jsonPath("$.stock", is(10)));
     }
 
     @Test
@@ -127,6 +87,7 @@ class BookControllerIntegrationTest {
 
         mockMvc.perform(post("/books").contentType(MediaType.APPLICATION_JSON)
                                       .content(objectMapper.writeValueAsString(newBookDto)))
+               .andDo(print())
                .andExpect(status().isOk())
                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                .andExpect(jsonPath("$.isbn", is(newBookDto.getIsbn())))
