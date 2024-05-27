@@ -6,6 +6,7 @@ import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -68,6 +69,16 @@ class CustomerControllerIntegrationTest {
 
     @Test
     @WithMockUser
+    void getCustomerByEmail_withInvalidEmail_badRequest() throws Exception {
+        mockMvc.perform(get("/customers/by-email").param("email", "EXAMPLE.BE"))
+               .andDo(print())
+               .andExpect(status().isBadRequest())
+               .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+               .andExpect(jsonPath("$.[0]", is("Invalid email address")));
+    }
+
+    @Test
+    @WithMockUser
     void getCustomerById_withCustomer_returnsCustomer() throws Exception {
         long id = 10L;
         mockMvc.perform(get("/customers/{id}", id))
@@ -86,5 +97,19 @@ class CustomerControllerIntegrationTest {
                .andExpect(status().isCreated())
                .andExpect(jsonPath("$.id", is(1)))
                .andExpect(jsonPath("$.email", is(customerDto.getEmail())));
+    }
+
+    @Test
+    @WithMockUser
+    void createCustomer_withInvalidCustomer_badRequest() throws Exception {
+        CustomerDto customerDto1 = CustomerDto.builder()
+                                              .email("example2.be")
+                                              .build();
+        mockMvc.perform(post("/customers").contentType(MediaType.APPLICATION_JSON)
+                                          .content(objectMapper.writeValueAsString(customerDto1)))
+               .andDo(print())
+               .andExpect(status().isBadRequest())
+               .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+               .andExpect(jsonPath("$.[0]", is("Invalid email address")));
     }
 }

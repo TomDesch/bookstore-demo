@@ -72,6 +72,16 @@ class BookControllerIntegrationTest {
 
     @Test
     @WithMockUser
+    void getBook_withInvalidISBN_badRequest() throws Exception {
+        mockMvc.perform(get("/books/{isbn}", "anInvalidISBN"))
+               .andDo(print())
+               .andExpect(status().isBadRequest())
+               .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+               .andExpect(jsonPath("$.[0]", is("Invalid ISBN")));
+    }
+
+    @Test
+    @WithMockUser
     void createBook_withValidISBN_createsBook() throws Exception {
         FullNameDto newFullNameDto = FullNameDto.builder()
                                                 .lastName("Doe")
@@ -98,5 +108,20 @@ class BookControllerIntegrationTest {
                                                            .doubleValue())))
                .andExpect(jsonPath("$.description", is(newBookDto.getDescription())))
                .andExpect(jsonPath("$.stock", is(newBookDto.getStock())));
+    }
+
+    @Test
+    @WithMockUser
+    void createBook_withInvalidISBN_badRequest() throws Exception {
+        BookDto newBookDto = BookDto.builder()
+                                    .isbn("invalidIsbn")
+                                    .build();
+
+        mockMvc.perform(post("/books").contentType(MediaType.APPLICATION_JSON)
+                                      .content(objectMapper.writeValueAsString(newBookDto)))
+               .andDo(print())
+               .andExpect(status().isBadRequest())
+               .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+               .andExpect(jsonPath("$.[0]", is("Invalid ISBN")));
     }
 }
