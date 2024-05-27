@@ -1,7 +1,5 @@
 package skilltest.bookstore.exception;
 
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.ConstraintViolationException;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.context.MessageSourceResolvable;
@@ -35,16 +33,6 @@ public class CustomExceptionHandler {
         return ex.getAllErrors()
                  .stream()
                  .map(MessageSourceResolvable::getDefaultMessage)
-                 .collect(Collectors.toList());
-    }
-
-    @ExceptionHandler(ConstraintViolationException.class)
-    @ResponseBody
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public List<String> handleConstraintViolationException(ConstraintViolationException ex) {
-        return ex.getConstraintViolations()
-                 .stream()
-                 .map(ConstraintViolation::getMessage)
                  .collect(Collectors.toList());
     }
 }
