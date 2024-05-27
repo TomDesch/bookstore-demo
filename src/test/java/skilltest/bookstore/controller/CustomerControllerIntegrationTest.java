@@ -55,14 +55,14 @@ class CustomerControllerIntegrationTest {
     @Test
     @WithMockUser
     void getCustomerByEmail_withCustomer_returnsCustomer() throws Exception {
-        mockMvc.perform(get("/customers/by-email").param("email", "test@example.be"))
+        mockMvc.perform(get("/customers/by-email").param("email", "TEST@EXAMPLE.BE"))
                .andDo(print())
                .andExpect(status().isOk())
                .andExpect(jsonPath("$.id", is(10)))
                .andExpect(jsonPath("$.fullName.id", is(10)))
-               .andExpect(jsonPath("$.fullName.firstName", is("a first name")))
-               .andExpect(jsonPath("$.fullName.lastName", is("a last name")))
-               .andExpect(jsonPath("$.email", is("test@example.be")));
+               .andExpect(jsonPath("$.fullName.firstName", is("A FIRST NAME")))
+               .andExpect(jsonPath("$.fullName.lastName", is("A LAST NAME")))
+               .andExpect(jsonPath("$.email", is("TEST@EXAMPLE.BE")));
     }
 
     @Test
@@ -73,7 +73,7 @@ class CustomerControllerIntegrationTest {
                .andDo(print())
                .andExpect(status().isOk())
                .andExpect(jsonPath("$.id", is((int) id)))
-               .andExpect(jsonPath("$.email", is("test@example.be")));
+               .andExpect(jsonPath("$.email", is("TEST@EXAMPLE.BE")));
     }
 
     @Test

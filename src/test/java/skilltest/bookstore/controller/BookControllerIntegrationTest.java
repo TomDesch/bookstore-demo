@@ -38,6 +38,9 @@ class BookControllerIntegrationTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    private static final String VALID_ISBN = "9780306406157";
+
+
     @Test
     @WithMockUser
     void getAllBooks() throws Exception {
@@ -46,7 +49,7 @@ class BookControllerIntegrationTest {
                .andExpect(status().isOk())
                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                .andExpect(jsonPath("$", hasSize(1)))
-               .andExpect(jsonPath("$[0].isbn", is("1234567890123")))
+               .andExpect(jsonPath("$[0].isbn", is(VALID_ISBN)))
                .andExpect(jsonPath("$[0].author.id", is(10)))
                .andExpect(jsonPath("$[0].price", is(29.99D)))
                .andExpect(jsonPath("$[0].description", is("A SAMPLE BOOK")))
@@ -56,12 +59,11 @@ class BookControllerIntegrationTest {
     @Test
     @WithMockUser
     void getBook() throws Exception {
-        String ISBN = "1234567890123";
-        mockMvc.perform(get("/books/{isbn}", ISBN))
+        mockMvc.perform(get("/books/{isbn}", VALID_ISBN))
                .andDo(print())
                .andExpect(status().isOk())
                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-               .andExpect(jsonPath("$.isbn", is(ISBN)))
+               .andExpect(jsonPath("$.isbn", is(VALID_ISBN)))
                .andExpect(jsonPath("$.price", is(29.99D)))
                .andExpect(jsonPath("$.description", is("A SAMPLE BOOK")))
                .andExpect(jsonPath("$.stock", is(10)));
@@ -78,7 +80,7 @@ class BookControllerIntegrationTest {
                                           .fullName(newFullNameDto)
                                           .build();
         BookDto newBookDto = BookDto.builder()
-                                    .isbn("9876543210987")
+                                    .isbn("0471958697")
                                     .author(newAuthorDto)
                                     .price(BigDecimal.valueOf(19.99))
                                     .description("Another sample book")
