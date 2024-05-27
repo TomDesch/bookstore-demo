@@ -4,14 +4,12 @@ import java.math.BigDecimal;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import skilltest.bookstore.validator.ValidIsbn;
 
 @RequiredArgsConstructor
 @Getter
 @EqualsAndHashCode
-@ToString
 @SuperBuilder
 public final class BookDto {
 

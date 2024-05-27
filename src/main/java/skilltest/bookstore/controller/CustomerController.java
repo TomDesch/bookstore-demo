@@ -1,6 +1,7 @@
 package skilltest.bookstore.controller;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -15,7 +16,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import skilltest.bookstore.dto.CustomerDto;
 import skilltest.bookstore.service.CustomerService;
-import skilltest.bookstore.validator.ValidEmail;
 
 
 @RestController
@@ -33,7 +33,7 @@ public class CustomerController {
 
     @GetMapping("/by-email")
     @PreAuthorize("hasRole('USER')")
-    public CustomerDto getCustomerByEmail(@RequestParam @ValidEmail String email) {
+    public CustomerDto getCustomerByEmail(@RequestParam @Email String email) {
         return customerService.getCustomer(email);
     }
 

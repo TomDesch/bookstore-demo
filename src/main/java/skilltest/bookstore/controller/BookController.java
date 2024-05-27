@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import skilltest.bookstore.dto.BookDto;
 import skilltest.bookstore.service.BookService;
-import skilltest.bookstore.validator.ValidEmail;
 import skilltest.bookstore.validator.ValidIsbn;
 
 @RestController

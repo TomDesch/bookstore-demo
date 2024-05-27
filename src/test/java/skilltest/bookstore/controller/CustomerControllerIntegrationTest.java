@@ -24,6 +24,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import skilltest.bookstore.dto.CustomerDto;
 import skilltest.bookstore.dto.FullNameDto;
+import skilltest.bookstore.service.CustomerService;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -36,6 +37,9 @@ class CustomerControllerIntegrationTest {
 
     @Autowired
     private ObjectMapper objectMapper;
+
+    @Autowired
+    private CustomerService customerService;
 
     private final CustomerDto customerDto = CustomerDto.builder()
                                                        .fullName(FullNameDto.builder()
@@ -74,7 +78,7 @@ class CustomerControllerIntegrationTest {
                .andDo(print())
                .andExpect(status().isBadRequest())
                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-               .andExpect(jsonPath("$.[0]", is("Invalid email address")));
+               .andExpect(jsonPath("$.[0]", is("must be a well-formed email address")));
     }
 
     @Test
@@ -110,6 +114,6 @@ class CustomerControllerIntegrationTest {
                .andDo(print())
                .andExpect(status().isBadRequest())
                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-               .andExpect(jsonPath("$.[0]", is("Invalid email address")));
+               .andExpect(jsonPath("$.[0]", is("must be a well-formed email address")));
     }
 }

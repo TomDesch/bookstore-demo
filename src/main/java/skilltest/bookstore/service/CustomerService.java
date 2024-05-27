@@ -1,6 +1,7 @@
 package skilltest.bookstore.service;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.constraints.Email;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -9,7 +10,6 @@ import org.springframework.stereotype.Service;
 import skilltest.bookstore.dto.CustomerDto;
 import skilltest.bookstore.model.Customer;
 import skilltest.bookstore.repository.CustomerRepository;
-import skilltest.bookstore.validator.ValidEmail;
 
 
 @Service
@@ -33,7 +33,7 @@ public class CustomerService {
                                  .orElseThrow(() -> new EntityNotFoundException(CUSTOMER_NOT_FOUND.formatted("id", id)));
     }
 
-    public CustomerDto getCustomer(@ValidEmail String email) {
+    public CustomerDto getCustomer(@Email String email) {
         return customerRepository.findCustomerByEmail(email)
                                  .map(this::toDto)
                                  .orElseThrow(() -> new EntityNotFoundException(CUSTOMER_NOT_FOUND.formatted("email", email)));
