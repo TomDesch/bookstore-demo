@@ -11,7 +11,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 import skilltest.bookstore.validator.ValidIsbn;
 
 @Entity
@@ -19,7 +18,6 @@ import skilltest.bookstore.validator.ValidIsbn;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 public class Book {
 
     @Id

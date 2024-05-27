@@ -36,10 +36,9 @@ public class IsbnValidator implements ConstraintValidator<ValidIsbn, String> {
     private boolean isValidISBN(String isbn) {
         if (isbn.length() == 10) {
             return isValidISBN10(isbn);
-        } else if (isbn.length() == 13) {
+        } else {
             return isValidISBN13(isbn);
         }
-        return false;
     }
 
     private boolean isValidISBN10(String isbn) {

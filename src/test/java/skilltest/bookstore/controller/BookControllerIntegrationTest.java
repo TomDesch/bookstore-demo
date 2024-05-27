@@ -124,4 +124,18 @@ class BookControllerIntegrationTest {
                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                .andExpect(jsonPath("$.[0]", is("Invalid ISBN")));
     }
+
+    @Test
+    @WithMockUser
+    void createBook_withNoISBN_badRequest() throws Exception {
+        BookDto newBookDto = BookDto.builder()
+                                    .build();
+
+        mockMvc.perform(post("/books").contentType(MediaType.APPLICATION_JSON)
+                                      .content(objectMapper.writeValueAsString(newBookDto)))
+               .andDo(print())
+               .andExpect(status().isBadRequest())
+               .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+               .andExpect(jsonPath("$.[0]", is("Invalid ISBN")));
+    }
 }
